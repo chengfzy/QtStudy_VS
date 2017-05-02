@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/imge">
+        <file alias="logo">Resources/git.png</file>
+        <file alias="image">Resources/spring.jpg</file>
+    </qresource>
+</RCC>
