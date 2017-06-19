@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/img">
+        <file alias="spring">Resources/spring.jpg</file>
+        <file alias="orange">Resources/Orange.jpg</file>
+    </qresource>
+</RCC>

@@ -15,7 +15,7 @@ PictureWidget::~PictureWidget()
 }
 
 //set image
-void PictureWidget::SetImage(const QPixmap & image)
+void PictureWidget::SetImages(const QPixmap & image)
 {
 	setFixedSize(image.size());
 	QPalette palette;
