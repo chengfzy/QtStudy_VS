@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/qss">
+        <file alias="main">Eq10_QSS.qss</file>
+    </qresource>
+</RCC>

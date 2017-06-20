@@ -25,7 +25,7 @@ public:
 	~PictureWidget();
 	
 public:
-	void SetImage(const QPixmap& image);	//set image
+	void SetImages(const QPixmap& image);	//set image
 	void SetLogo(const QPixmap& image);		//set logo
 
 protected:

@@ -17,11 +17,11 @@ Eg01_EditablePicture::Eg01_EditablePicture(QWidget *parent)
 
 	//picture widget
 	m_pPictureWidget = new PictureWidget();
-	m_pPictureWidget->SetImage(*m_pImage);
+	m_pPictureWidget->SetImages(*m_pImage);
 	m_pPictureWidget->SetLogo(QPixmap(tr(":/imge/logo")));
 	
 	QHBoxLayout* mainLayout = new QHBoxLayout();
-	mainLayout->addWidget(m_pImageWidget);
+	//mainLayout->addWidget(m_pImageWidget);
 	mainLayout->addWidget(m_pPictureWidget);
 
 	setLayout(mainLayout);
