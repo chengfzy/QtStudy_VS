@@ -38,6 +38,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eg14_QtThread", "Eg14_QtThr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.vcxproj", "{CA427699-C774-4C41-BAA0-9491A778D450}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eg15_HandleExcel", "Eg15_HandleExcel\Eg15_HandleExcel.vcxproj", "{70992F3C-D533-4189-AE4D-467C98FEBC35}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eg16_SqlBasic", "Eg16_SqlBasic\Eg16_SqlBasic.vcxproj", "{41C2616F-8E01-4F15-8A12-1613D1C78EF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -138,6 +142,18 @@ Global
 		{CA427699-C774-4C41-BAA0-9491A778D450}.Release|x64.Build.0 = Release|x64
 		{CA427699-C774-4C41-BAA0-9491A778D450}.Release|x86.ActiveCfg = Release|Win32
 		{CA427699-C774-4C41-BAA0-9491A778D450}.Release|x86.Build.0 = Release|Win32
+		{70992F3C-D533-4189-AE4D-467C98FEBC35}.Debug|x64.ActiveCfg = Debug|x64
+		{70992F3C-D533-4189-AE4D-467C98FEBC35}.Debug|x64.Build.0 = Debug|x64
+		{70992F3C-D533-4189-AE4D-467C98FEBC35}.Debug|x86.ActiveCfg = Debug|x64
+		{70992F3C-D533-4189-AE4D-467C98FEBC35}.Release|x64.ActiveCfg = Release|x64
+		{70992F3C-D533-4189-AE4D-467C98FEBC35}.Release|x64.Build.0 = Release|x64
+		{70992F3C-D533-4189-AE4D-467C98FEBC35}.Release|x86.ActiveCfg = Release|x64
+		{41C2616F-8E01-4F15-8A12-1613D1C78EF5}.Debug|x64.ActiveCfg = Debug|x64
+		{41C2616F-8E01-4F15-8A12-1613D1C78EF5}.Debug|x64.Build.0 = Debug|x64
+		{41C2616F-8E01-4F15-8A12-1613D1C78EF5}.Debug|x86.ActiveCfg = Debug|x64
+		{41C2616F-8E01-4F15-8A12-1613D1C78EF5}.Release|x64.ActiveCfg = Release|x64
+		{41C2616F-8E01-4F15-8A12-1613D1C78EF5}.Release|x64.Build.0 = Release|x64
+		{41C2616F-8E01-4F15-8A12-1613D1C78EF5}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

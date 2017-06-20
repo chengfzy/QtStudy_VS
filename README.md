@@ -11,3 +11,9 @@ Some QT codes during studying
 7. Eg07_ImageListWidget：Image List Widget，显示一图片列表
 8. Eg08_ImageWidget：Image Viewer，显示Image的控件，并能自动调整大小
 9. Eg09_Scroll：scroll配合QHBoxLayout使用
+10. Eg10_QSS
+11. Eg11_GraphicsView
+12. Eg12_FramePreview
+14. Eg14_QtThread
+15. Eg15_HandleExcel: 使用Qt操作Excel，使用QtXlsx模块
+16. Eg16_SqlBasic：数据库的基本操作: https://www.devbean.net/2013/06/qt-study-road-2-database/
