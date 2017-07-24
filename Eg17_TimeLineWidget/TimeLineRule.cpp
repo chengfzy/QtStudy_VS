@@ -3,7 +3,7 @@
 
 static const int g_nInitialRuleNum = 50;	//20 rules at initialization
 static const int g_nInitialWidth = 800;
-
+const int TimeLineRule::m_nLabelWidth = 100;
 
 TimeLineRule::TimeLineRule(QTime duration, int frameNum, QWidget *parent)
 	: m_duration(duration), m_nFrameNum(frameNum), m_nCurrentFrame(0)
@@ -14,7 +14,7 @@ TimeLineRule::TimeLineRule(QTime duration, int frameNum, QWidget *parent)
 	m_nMaxFrameStep = m_nFrameNum / 10;
 	
 	setFixedHeight(30);
-	setFixedWidth(g_nInitialWidth);
+	setFixedWidth(m_nLabelWidth + g_nInitialWidth);
 }
 
 TimeLineRule::~TimeLineRule()
@@ -57,7 +57,7 @@ void TimeLineRule::setFrameStep(int step)
 		step = m_nMaxFrameStep;
 	if (step != m_nFrameStep)
 	{
-		setFixedWidth(static_cast<double>(m_nFrameNum) / g_nInitialRuleNum * g_nInitialWidth / step);
+		setFixedWidth(m_nLabelWidth + static_cast<double>(m_nFrameNum) / g_nInitialRuleNum * g_nInitialWidth / step);
 		m_nFrameStep = step;
 		emit frameStepChanged(m_nFrameStep);
 	}
@@ -128,7 +128,7 @@ void TimeLineRule::paintEvent(QPaintEvent * event)
 	//draw triangle
 	painter.setBrush(Qt::white);
 	const int nTriangleSize = 4;
-	QVector<QPointF> trianglePos{ QPointF(dCurrentFrameX, nTriangleSize * 2),  QPointF(dCurrentFrameX - nTriangleSize, 0), QPointF(dCurrentFrameX + nTriangleSize, 0) };
+	QVector<QPointF> trianglePos{ QPointF(dCurrentFrameX, nTriangleSize * 2), QPointF(dCurrentFrameX - nTriangleSize, 0), QPointF(dCurrentFrameX + nTriangleSize, 0) };
 	painter.drawPolygon(QPolygonF(trianglePos));
 	painter.restore();
 }
@@ -152,11 +152,11 @@ void TimeLineRule::mouseMoveEvent(QMouseEvent * event)
 // get frame from x position
 int TimeLineRule::positionToFrame(double x)
 {
-	return round(x * m_nFrameNum / width());
+	return round((x - m_nLabelWidth) * m_nFrameNum / width());
 }
 
 // get x position from frame
 double TimeLineRule::frameToPosition(int frame)
 {
-	return frame * width() / m_nFrameNum;
+	return m_nLabelWidth + frame * width() / m_nFrameNum;
 }

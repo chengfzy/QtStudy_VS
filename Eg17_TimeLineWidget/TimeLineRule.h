@@ -51,4 +51,6 @@ protected:
 	int m_nMinFrameStep;	//min frame step
 	int m_nMaxFrameStep;	//max frame step
 	int m_nFrameStep;		//step in frame(int)
+
+	static const int m_nLabelWidth;		//label width in left
 };

@@ -59,8 +59,9 @@ void TimeLineWidget::setupUI()
 	pToolBar->addAction(pZoomInAction);
 
 	//track label layout
+	m_pTrackLabelTopFiller = new TrackLabelTopFiller();
 	m_pTrackLabelLayout = new QVBoxLayout();
-	m_pTrackLabelLayout->addWidget(new TrackLabelTopFiller());
+	m_pTrackLabelLayout->addWidget(m_pTrackLabelTopFiller);
 
 	//track editor layout
 	m_pTrackEditorLayout = new QVBoxLayout();
@@ -73,6 +74,7 @@ void TimeLineWidget::setupUI()
 	QHBoxLayout* pTrackLayout = new QHBoxLayout();
 	pTrackLayout->addLayout(m_pTrackLabelLayout);
 	pTrackLayout->addLayout(m_pTrackEditorLayout);
+	pTrackLayout->addStretch();
 	pTrackLayout->setSpacing(0);
 	pTrackLayout->setSizeConstraint(QLayout::SizeConstraint::SetMinimumSize);
 
@@ -171,6 +173,7 @@ void TimeLineWidget::removeTrackFromScroll()
 void TimeLineWidget::updateTrackWidget()
 {
 	int height = m_pRule->height();
+	m_pTrackLabelLayout->addWidget(m_pTrackLabelTopFiller);
 	m_pTrackEditorLayout->addWidget(m_pRule);
 	for (auto pTrack : m_apTrack)
 	{

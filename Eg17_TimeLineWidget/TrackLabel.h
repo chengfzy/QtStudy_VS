@@ -10,6 +10,9 @@ public:
 	TrackLabel(QString title = "Step", QWidget *parent = nullptr);
 	~TrackLabel();
 
+protected:
+	void paintEvent(QPaintEvent *event) override;
+
 private:
 	void setupUI();
 

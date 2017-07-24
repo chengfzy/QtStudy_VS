@@ -53,6 +53,7 @@ private:
 	int m_nFrameStep;			//frame step to draw the rule
 
 	QSlider* m_pScaleSlider;
+	TrackLabelTopFiller* m_pTrackLabelTopFiller;
 	QVBoxLayout* m_pTrackLabelLayout;
 	QVBoxLayout* m_pTrackEditorLayout;
 	QWidget* m_pTrackContainerWidget;

@@ -12,6 +12,19 @@ TrackLabel::~TrackLabel()
 {
 }
 
+void TrackLabel::paintEvent(QPaintEvent * event)
+{
+	QPainter painter(this);
+	const int nTimeRectHeight = height();
+
+	//draw backgroud rect
+	painter.save();
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(QColor(Qt::darkGray));
+	painter.drawRect(this->rect());
+	painter.restore();
+}
+
 void TrackLabel::setupUI()
 {
 	//title lable
