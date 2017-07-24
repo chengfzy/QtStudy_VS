@@ -22,4 +22,4 @@ Some QT codes during studying
 14. Eg14_QtThread
 15. Eg15_HandleExcel: 使用Qt操作Excel，使用QtXlsx模块
 16. Eg16_SqlBasic：数据库的基本操作: https://www.devbean.net/2013/06/qt-study-road-2-database/
->>>>>>> 9d8f25665f046e76b51c8608ccf9b5c0c8a8b5ab
+17. Eg17_TimeLineWidget: 制作一个用于视频的TimeLineWidget
