@@ -2,30 +2,16 @@
 
 #include <QtWidgets>
 #include "TimeLineRule.h"
-#include "TrackLabel.h"
-#include "TrackLabelTopFiller.h"
-#include "TrackEditor.h"
+#include "Track.h"
 
 
 class TimeLineWidget : public QWidget
 {
 	Q_OBJECT
 
-private:
-	struct Track
-	{
-		Track(TrackLabel* pLabel = nullptr, TrackEditor* pEditor = nullptr)
-			: pLabel(pLabel), pEditor(pEditor)
-		{}
-
-		TrackLabel* pLabel;
-		TrackEditor* pEditor;
-	};
-
 public:
 	TimeLineWidget(QWidget *parent = nullptr);
 	~TimeLineWidget();
-
 
 private:
 	void setupUI();
@@ -44,18 +30,11 @@ private:
 
 private:
 	TimeLineRule* m_pRule;						//time line rule
-	QVector<Track> m_apTrack;					//track list
-	//TrackEditor* m_pTrackEditor;				//track editor
+	QVector<Track*> m_apTrack;					//track list
 
-	int m_nFrameNum;			//frame number
-
-	int m_nShowStartFrame;		//the start frame shown
-	int m_nFrameStep;			//frame step to draw the rule
+	int m_nFrameNum;							//frame number
 
 	QSlider* m_pScaleSlider;
-	TrackLabelTopFiller* m_pTrackLabelTopFiller;
-	QVBoxLayout* m_pTrackLabelLayout;
-	QVBoxLayout* m_pTrackEditorLayout;
+	QVBoxLayout* m_pTrackLayout;
 	QWidget* m_pTrackContainerWidget;
-
 };

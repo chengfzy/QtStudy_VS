@@ -38,9 +38,9 @@ protected:
 	void mouseMoveEvent(QMouseEvent* event) override;
 
 protected:
-	// get frame from x position
+	// get frame at x position
 	int positionToFrame(double x);
-	// get x position from frame
+	// get x position at frame
 	double frameToPosition(int frame);
 
 protected:

@@ -73,31 +73,13 @@
     <ClCompile Include="TimeLineRule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TrackEditor.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_Track.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TrackEditor.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_Track.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="TrackEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TrackLabel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TrackLabel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="TrackLabel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TrackLabelTopFiller.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TrackLabelTopFiller.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="TrackLabelTopFiller.cpp">
+    <ClCompile Include="Track.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,13 +96,7 @@
     <CustomBuild Include="TimeLineRule.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="TrackEditor.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TrackLabel.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TrackLabelTopFiller.h">
+    <CustomBuild Include="Track.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

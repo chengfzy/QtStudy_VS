@@ -1,9 +1,9 @@
-#include "TrackEditor.h"
+#include "Track.h"
 #include <QtWidgets>
 
 static const int g_nMouseAdjustThresh = 5;
 
-TrackEditor::TrackEditor(QTime duration, int frameNum, QWidget *parent)
+Track::Track(QTime duration, int frameNum, QWidget *parent)
 	: TimeLineRule(duration, frameNum, parent)
 	, m_nStartFrame(0), m_nEndFrame(0)
 	, m_bSelected(false), m_bAdjustStart(false), m_bAdjustEnd(false), m_bMouseDrag(false)
@@ -12,58 +12,64 @@ TrackEditor::TrackEditor(QTime duration, int frameNum, QWidget *parent)
 	setMouseTracking(true);
 }
 
-TrackEditor::~TrackEditor()
+Track::~Track()
 {
 }
 
-int TrackEditor::startFrame() const
+int Track::startFrame() const
 {
 	return m_nStartFrame;
 }
 
-int TrackEditor::endFrame() const
+int Track::endFrame() const
 {
 	return m_nEndFrame;
 }
 
-QString TrackEditor::title() const
+QString Track::title() const
 {
 	return m_szTitle;
 }
 
-bool TrackEditor::isSelected() const
+bool Track::isSelected() const
 {
 	return m_bSelected;
 }
 
-void TrackEditor::setStartFrame(int frame)
+void Track::setStartFrame(int frame)
 {
 	if (0 <= frame && frame <= m_nEndFrame)
+	{
 		m_nStartFrame = frame;
+		emit startFrameChanged(m_nStartFrame);
+	}
 }
 
-void TrackEditor::setEndFrame(int frame)
+void Track::setEndFrame(int frame)
 {
 	if (m_nStartFrame <= frame && frame < m_nFrameNum)
+	{
 		m_nEndFrame = frame;
+		emit endFrameChanged(m_nEndFrame);
+	}
 }
 
-void TrackEditor::setTitle(const QString& title)
+void Track::setTitle(const QString& title)
 {
 	m_szTitle = title;
 }
 
-void TrackEditor::setStartFrameImage(const QPixmap & image)
+void Track::setStartFrameImage(const QPixmap & image)
 {
 	m_startFrameThumb = image;
 }
 
-void TrackEditor::setEndFrameImage(const QPixmap & image)
+void Track::setEndFrameImage(const QPixmap & image)
 {
 	m_endFrameThumb = image;
 }
 
-void TrackEditor::setSelected(bool selected)
+void Track::setSelected(bool selected)
 {
 	m_bSelected = selected;
 	if (m_bSelected)
@@ -72,7 +78,7 @@ void TrackEditor::setSelected(bool selected)
 }
 
 // move region with delta frame
-void TrackEditor::moveRegion(int deltaFrame)
+void Track::moveRegion(int deltaFrame)
 {
 	int startFrame = m_nStartFrame + deltaFrame;
 	int endFrame = m_nEndFrame + deltaFrame;
@@ -84,7 +90,7 @@ void TrackEditor::moveRegion(int deltaFrame)
 	}
 }
 
-void TrackEditor::paintEvent(QPaintEvent * event)
+void Track::paintEvent(QPaintEvent * event)
 {
 	QPainter painter(this);
 	const int nHeight = height();
@@ -101,6 +107,23 @@ void TrackEditor::paintEvent(QPaintEvent * event)
 	painter.drawRect(this->rect());
 	painter.restore();
 
+	//draw label-track editor line
+	painter.save();
+	painter.setPen(QColor(Qt::white));
+	painter.drawLine(m_nLabelWidth, 0, m_nLabelWidth, nHeight);
+	painter.restore();
+
+	//draw label text
+	QString szLabel(tr("%1\r\n%2 Logos\r\n[%3 - %4]").arg(m_szTitle).arg(3).arg(m_nStartFrame).arg(m_nEndFrame));
+	QRect labelRect(5, 0, m_nLabelWidth - 5, nHeight);
+	painter.save();
+	if (m_bSelected)
+		painter.setPen(QColor(Qt::blue));
+	else
+		painter.setPen(QColor(Qt::black));
+	painter.drawText(labelRect, Qt::AlignVCenter | Qt::AlignLeft, szLabel);
+	painter.restore();
+
 	//draw the track region
 	painter.save();
 	painter.setPen(QColor(Qt::darkBlue));
@@ -112,7 +135,7 @@ void TrackEditor::paintEvent(QPaintEvent * event)
 	painter.restore();
 
 	//draw thumbnail in start frame
-	const float fThumbHeight = height() * 0.7;
+	const float fThumbHeight = nHeight * 0.7;
 	QSize startThumbSize(m_startFrameThumb.width() * fThumbHeight / m_startFrameThumb.height(), fThumbHeight);
 	painter.save();
 	if (dEndPix - dStartPix >= startThumbSize.width())
@@ -136,7 +159,7 @@ void TrackEditor::paintEvent(QPaintEvent * event)
 		painter.restore();
 	}
 
-	//draw titleStaticText
+	//draw title text
 	QStaticText titleStaticText(m_szTitle);
 	QRectF titleRect(dStartPix, nHeight - 20, titleStaticText.size().width() + 2, titleStaticText.size().height());
 	//draw rect
@@ -159,12 +182,12 @@ void TrackEditor::paintEvent(QPaintEvent * event)
 	painter.restore();
 }
 
-void TrackEditor::mousePressEvent(QMouseEvent * event)
+void Track::mousePressEvent(QMouseEvent * event)
 {
 	if (event->button() == Qt::LeftButton)
 	{
 		if (frameToPosition(m_nStartFrame) - g_nMouseAdjustThresh <= event->pos().x() && event->pos().x() <= frameToPosition(m_nStartFrame) + g_nMouseAdjustThresh
-			&& frameToPosition(m_nStartFrame) >= g_nMouseAdjustThresh)
+			&& (frameToPosition(m_nEndFrame) - frameToPosition(m_nStartFrame) >= g_nMouseAdjustThresh || frameToPosition(m_nStartFrame) - m_nLabelWidth >= g_nMouseAdjustThresh))
 		{
 			//adjust region left edge(start frame), the last check is ensure GUI workable when region is small and near widget border
 			m_bAdjustStart = true;
@@ -197,19 +220,26 @@ void TrackEditor::mousePressEvent(QMouseEvent * event)
 			event->accept();
 			return;
 		}
+		else if (0 <= event->pos().x() && event->pos().x() <= m_nLabelWidth)
+		{
+			//select the label
+			setSelected(true);
+			event->accept();
+			return;
+		}
 	}
 
 	TimeLineRule::mousePressEvent(event);
 }
 
-void TrackEditor::mouseMoveEvent(QMouseEvent * event)
+void Track::mouseMoveEvent(QMouseEvent * event)
 {
 	if (event->buttons() && Qt::LeftButton)
 	{
 		if (m_bAdjustStart)
 		{
-			int deltaX = event->pos().x() - m_mousePos.x();
-			setStartFrame(m_nStartFrame + positionToFrame(deltaX));
+			int deltaFrame = positionToFrame(event->pos().x()) - positionToFrame(m_mousePos.x());
+			setStartFrame(m_nStartFrame + deltaFrame);
 			m_mousePos = event->pos();
 			update();
 			event->accept();
@@ -217,8 +247,8 @@ void TrackEditor::mouseMoveEvent(QMouseEvent * event)
 		}
 		else if (m_bAdjustEnd)
 		{
-			int deltaX = event->pos().x() - m_mousePos.x();
-			setEndFrame(m_nEndFrame + positionToFrame(deltaX));
+			int deltaFrame = positionToFrame(event->pos().x()) - positionToFrame(m_mousePos.x());
+			setEndFrame(m_nEndFrame + deltaFrame);
 			m_mousePos = event->pos();
 			update();
 			event->accept();
@@ -227,8 +257,8 @@ void TrackEditor::mouseMoveEvent(QMouseEvent * event)
 		else if (m_bMouseDrag)
 		{
 			//drag track region
-			int deltaX = event->pos().x() - m_mousePos.x();
-			moveRegion(positionToFrame(deltaX));
+			int deltaFrame = positionToFrame(event->pos().x()) - positionToFrame(m_mousePos.x());
+			moveRegion(deltaFrame);
 			m_mousePos = event->pos();
 			event->accept();
 			return;
@@ -250,7 +280,7 @@ void TrackEditor::mouseMoveEvent(QMouseEvent * event)
 	TimeLineRule::mouseMoveEvent(event);
 }
 
-void TrackEditor::mouseReleaseEvent(QMouseEvent * event)
+void Track::mouseReleaseEvent(QMouseEvent * event)
 {
 	m_bAdjustStart = m_bAdjustEnd = m_bMouseDrag = false;	
 	setCursor(Qt::ArrowCursor);

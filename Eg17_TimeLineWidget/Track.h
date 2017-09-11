@@ -2,13 +2,13 @@
 
 #include "TimeLineRule.h"
 
-class TrackEditor : public TimeLineRule
+class Track : public TimeLineRule
 {
 	Q_OBJECT
 
 public:
-	TrackEditor(QTime duration = QTime(), int frameNum = 0, QWidget *parent = nullptr);
-	~TrackEditor();
+	Track(QTime duration = QTime(), int frameNum = 0, QWidget *parent = nullptr);
+	~Track();
 
 public:
 	int startFrame() const;
@@ -28,6 +28,8 @@ public:
 
 signals:
 	void trackSelected() const;
+	void startFrameChanged(int frame) const;
+	void endFrameChanged(int frame) const;
 
 protected:
 	void paintEvent(QPaintEvent *event) override;
