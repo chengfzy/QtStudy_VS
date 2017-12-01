@@ -4,7 +4,6 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
 	: QWidget(parent)
 {
 	m_pRule = new TimeLineRule(QTime(0, 0, 1), 1000);
-
 	setupUI();
 }
 
@@ -58,39 +57,24 @@ void TimeLineWidget::setupUI()
 	pToolBar->addWidget(m_pScaleSlider);
 	pToolBar->addAction(pZoomInAction);
 
-	//track label layout
-	m_pTrackLabelTopFiller = new TrackLabelTopFiller();
-	m_pTrackLabelLayout = new QVBoxLayout();
-	m_pTrackLabelLayout->addWidget(m_pTrackLabelTopFiller);
-
 	//track editor layout
-	m_pTrackEditorLayout = new QVBoxLayout();
-	m_pTrackEditorLayout->addWidget(m_pRule);
-	m_pTrackEditorLayout->addStretch();
-	//m_pTrackEditorLayout->setSpacing(0);
-	m_pTrackEditorLayout->setSizeConstraint(QLayout::SizeConstraint::SetMinimumSize);
-
-	//track layout
-	QHBoxLayout* pTrackLayout = new QHBoxLayout();
-	pTrackLayout->addLayout(m_pTrackLabelLayout);
-	pTrackLayout->addLayout(m_pTrackEditorLayout);
-	pTrackLayout->addStretch();
-	pTrackLayout->setSpacing(0);
-	pTrackLayout->setSizeConstraint(QLayout::SizeConstraint::SetMinimumSize);
+	m_pTrackLayout = new QVBoxLayout();
+	m_pTrackLayout->addWidget(m_pRule);
+	m_pTrackLayout->addStretch();
+	m_pTrackLayout->setSpacing(0);
+	m_pTrackLayout->setSizeConstraint(QLayout::SizeConstraint::SetMinimumSize);
 
 	//track container widget
 	m_pTrackContainerWidget = new QWidget();
-	m_pTrackContainerWidget->setLayout(pTrackLayout);
+	m_pTrackContainerWidget->setLayout(m_pTrackLayout);
 	//track scroll area
 	QScrollArea* pTrackScrollArea = new QScrollArea();
 	pTrackScrollArea->setWidget(m_pTrackContainerWidget);
-	//pTrackScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	pTrackScrollArea->setFrameShape(QFrame::NoFrame);
 
 	//main layout
 	QVBoxLayout* pMainLayout = new QVBoxLayout();
 	pMainLayout->addWidget(pToolBar);
-	//pMainLayout->addLayout(pTrackLayout);
 	pMainLayout->addWidget(pTrackScrollArea);
 
 	this->setLayout(pMainLayout);
@@ -100,57 +84,51 @@ void TimeLineWidget::setCurrentFrame(int frame)
 {
 	m_pRule->setCurrentFrame(frame);
 	for (auto pTrackEditor : m_apTrack)
-		pTrackEditor.pEditor->setCurrentFrame(frame);
+		pTrackEditor->setCurrentFrame(frame);
 }
 
 void TimeLineWidget::setFrameStep(int step)
 {
 	m_pRule->setFrameStep(step);
 	for (auto pTrackEditor : m_apTrack)
-		pTrackEditor.pEditor->setFrameStep(step);
+		pTrackEditor->setFrameStep(step);
 }
 
 void TimeLineWidget::addTrack()
 {
 	removeTrackFromScroll();
-
-	//add track label
-	TrackLabel* pTrackLabel = new TrackLabel("Step01");
-
+	
 	//add track editor
-	TrackEditor* pTrackEditor = new TrackEditor(QTime(0, 0, 1), 1000);
-	pTrackEditor->setStartFrame(100);
-	pTrackEditor->setEndFrame(500);
-	pTrackEditor->setFrameStep(m_pRule->frameStep());
-	pTrackEditor->setTitle("New Logo Track");
+	Track* pTrack = new Track(QTime(0, 0, 1), 1000);
+	pTrack->setStartFrame(100);
+	pTrack->setEndFrame(500);
+	pTrack->setFrameStep(m_pRule->frameStep());
+	pTrack->setTitle("Step01");
 	QPixmap startFrame("D:/Code/Data/spring01.jpg");
 	QPixmap endFrame("D:/Code/Data/spring02.jpg");
-	pTrackEditor->setStartFrameImage(startFrame);
-	pTrackEditor->setEndFrameImage(endFrame);
-	connect(pTrackEditor, &TrackEditor::currentFrameChanged, m_pRule, &TimeLineRule::currentFrameChanged);
-	connect(pTrackEditor, &TrackEditor::trackSelected, this, &TimeLineWidget::udpateSelectTrack);
-
-
-	m_apTrack.push_back(Track(pTrackLabel, pTrackEditor));
+	pTrack->setStartFrameImage(startFrame);
+	pTrack->setEndFrameImage(endFrame);
+	connect(pTrack, &Track::currentFrameChanged, m_pRule, &TimeLineRule::currentFrameChanged);
+	connect(pTrack, &Track::trackSelected, this, &TimeLineWidget::udpateSelectTrack);
+	
+	m_apTrack.push_back(pTrack);
 	updateTrackWidget();
 }
 
 void TimeLineWidget::removeTrack()
 {
-	QVector<Track>::iterator it = m_apTrack.begin();
+	QVector<Track*>::iterator it = m_apTrack.begin();
 	for (; it != m_apTrack.end(); ++it)
 	{
-		if (it->pEditor->isSelected())
+		if ((*it)->isSelected())
 			break;
 	}
 	if (it != m_apTrack.end())
 	{
 		removeTrackFromScroll();
-		TrackLabel* pLabel = it->pLabel;
-		TrackEditor* pEditor = it->pEditor;
+		Track* pEditor = *it;
 		m_apTrack.erase(it);
 		updateTrackWidget();
-		delete pLabel;
 		delete pEditor;
 		update();
 	}
@@ -159,13 +137,9 @@ void TimeLineWidget::removeTrack()
 // remove all track from scroll area
 void TimeLineWidget::removeTrackFromScroll()
 {
-	for (int i = 0; i < m_pTrackLabelLayout->count(); ++i)
+	for (int i = 0; i < m_pTrackLayout->count(); ++i)
 	{
-		m_pTrackLabelLayout->removeItem(m_pTrackLabelLayout->itemAt(i));
-	}
-	for (int i = 0; i < m_pTrackEditorLayout->count(); ++i)
-	{
-		m_pTrackEditorLayout->removeItem(m_pTrackEditorLayout->itemAt(i));
+		m_pTrackLayout->removeItem(m_pTrackLayout->itemAt(i));
 	}
 	update();
 }
@@ -173,27 +147,25 @@ void TimeLineWidget::removeTrackFromScroll()
 void TimeLineWidget::updateTrackWidget()
 {
 	int height = m_pRule->height();
-	m_pTrackLabelLayout->addWidget(m_pTrackLabelTopFiller);
-	m_pTrackEditorLayout->addWidget(m_pRule);
+	m_pTrackLayout->addWidget(m_pRule);
 	for (auto pTrack : m_apTrack)
 	{
-		m_pTrackLabelLayout->addWidget(pTrack.pLabel);
-		m_pTrackEditorLayout->addWidget(pTrack.pEditor);
-		height += pTrack.pEditor->height();
+		m_pTrackLayout->addWidget(pTrack);
+		height += pTrack->height();
 	}
-	m_pTrackEditorLayout->addStretch();
-	m_pTrackEditorLayout->setSpacing(0);
+	m_pTrackLayout->addStretch();
+	m_pTrackLayout->setSpacing(0);
 	m_pTrackContainerWidget->setFixedHeight(height);
 	update();
 }
 
 void TimeLineWidget::udpateSelectTrack()
 {
-	TrackEditor* pTrackEditor = qobject_cast<TrackEditor*>(sender());
+	Track* pTrackEditor = qobject_cast<Track*>(sender());
 	int index = 0;
 	for (; index < m_apTrack.size(); ++index)
 	{
-		if (pTrackEditor != m_apTrack[index].pEditor)
-			m_apTrack[index].pEditor->setSelected(false);
+		if (pTrackEditor != m_apTrack[index])
+			m_apTrack[index]->setSelected(false);
 	}
-}
+} 

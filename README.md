@@ -15,7 +15,6 @@ Some QT codes during studying
 11. Eg11_Thumbnail:多线程实现图片以缩略图显示
 12. Eg12_FramePreview:类似于视频每一帧的显示条
 13. Eg13_CustomizedCombobox:类似于QQ登录窗口的下拉框，未完成，有些问题(index与lineEdit的显示问题)
-=======
 10. Eg10_QSS
 11. Eg11_GraphicsView
 12. Eg12_FramePreview
@@ -23,3 +22,5 @@ Some QT codes during studying
 15. Eg15_HandleExcel: 使用Qt操作Excel，使用QtXlsx模块
 16. Eg16_SqlBasic：数据库的基本操作: https://www.devbean.net/2013/06/qt-study-road-2-database/
 17. Eg17_TimeLineWidget: 制作一个用于视频的TimeLineWidget
+18. Eg18_RedirectCoutToTextEdit: 将cout输出到QTextEdit
+19. Eg19_AnotherRedirectCoutToTextEdit: 将cout输出到QTextEdit，使用模板，更高级的做法，参考COLMAP log_widget.h源码

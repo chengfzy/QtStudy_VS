@@ -92,7 +92,7 @@ void TimeLineRule::setCurrentFrame(int frame)
 }
 
 void TimeLineRule::paintEvent(QPaintEvent * event)
-{	
+{
 	QPainter painter(this);
 	const int nTimeRectHeight = height();
 
@@ -108,6 +108,8 @@ void TimeLineRule::paintEvent(QPaintEvent * event)
 	const int nMinRuleHeight = nMaxRuleHeight * 0.5;
 	painter.save();
 	painter.setPen(QColor(Qt::white));
+	painter.drawLine(frameToPosition(0), 0, frameToPosition(0), nTimeRectHeight);
+	painter.drawText(QPointF(frameToPosition(0) + 2, nTimeRectHeight / 2), QString::number(0));
 	for (int n = m_nFrameStep; n < m_nFrameNum; n += m_nFrameStep)
 	{
 		for (int i = 0; i < 4; ++i)
@@ -149,14 +151,14 @@ void TimeLineRule::mouseMoveEvent(QMouseEvent * event)
 	}
 }
 
-// get frame from x position
+// get frame at x position
 int TimeLineRule::positionToFrame(double x)
 {
-	return round((x - m_nLabelWidth) * m_nFrameNum / width());
+	return round((x - m_nLabelWidth) * m_nFrameNum / (width() - m_nLabelWidth));
 }
 
-// get x position from frame
+// get x position at frame
 double TimeLineRule::frameToPosition(int frame)
 {
-	return m_nLabelWidth + frame * width() / m_nFrameNum;
+	return m_nLabelWidth + frame * (width() - m_nLabelWidth) / m_nFrameNum;
 }
