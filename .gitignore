@@ -240,3 +240,11 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# VS using QT
+GeneratedFiles/
+
+# Clion
+cmake-build-debug/
+cmake-build-release/
+.idea
